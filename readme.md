@@ -1,4 +1,6 @@
-![logo](/chrome/addon/cursors/logo.png)
+<div class="card black">
+  <img src="./chrome/addon/cursors/logo.png"></img>
+</div>
 
 [visit our website](http://www.cursors.anits.edu.in/)
 ---
@@ -13,6 +15,9 @@
         color:black;
         font-weight:bold;
         box-shadow:5px 5px 10px black;
+    }
+    .black{
+        background:black;
     }
     span{
         color:red;
