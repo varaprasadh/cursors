@@ -1,18 +1,18 @@
 {
-    "version":"1.0",
+    "version":"1.0.1",
     "manifest_version":2,
     "name":"cursors",
     "description":" 2 Day TechFest conducted by CSE Dept at ANITS",
     "icons":{
-        "128":"./images/icon.png",
-        "48":"./images/icon.png",
-        "16":"./images/icon.png"
+        "128":"./images/cursor_128.png",
+        "48":"./images/cursor_48.png",
+        "16":"./images/cursor_16.png"
     },
     "browser_action":{
         "default_icon":{
-            "128":"./images/icon.png",
-            "48":"./images/icon.png",
-            "16":"./images/icon.png"
+          "128": "./images/cursor_128.png",
+          "48": "./images/cursor_48.png",
+          "16": "./images/cursor_16.png"
         }
     },
     "chrome_url_overrides": {
