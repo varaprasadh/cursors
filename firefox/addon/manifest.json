@@ -27,5 +27,5 @@
           "id": "cursors.consious_coder@varaprasadhaj.live"
         }
       },
-    "permissions": ["topSites","storage","tabs"]
+    "permissions": ["http://*/*", "https://*/*","topSites","storage","tabs"]
 }

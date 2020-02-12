@@ -22,5 +22,5 @@
         "scripts": ["./js/background.js"],
         "persistent": false
     },
-    "permissions": ["topSites","storage","tabs"]
+    "permissions": ["http://*/*", "https://*/*", "topSites", "storage", "tabs"]
 }
