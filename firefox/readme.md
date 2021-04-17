@@ -1,0 +1,1 @@
+this space may contains firefox specific apis

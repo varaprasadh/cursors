@@ -22,5 +22,6 @@
         "scripts": ["./js/background.js"],
         "persistent": false
     },
+"web_accessible_resources": ["images/icon.png"],
     "permissions": ["http://*/*", "https://*/*", "topSites", "storage", "tabs"]
 }

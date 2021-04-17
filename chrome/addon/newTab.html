@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +9,48 @@
     <link rel="stylesheet" href="./css/newTab.css">
     <script src="./js/newTab.js"></script>
 </head>
+
 <body>
+    <div class="bg-wallpaper">
+        <img alt="wallpaper">
+    </div>
+    <div class="alert">
+        <div class="message">
+
+        </div>
+    </div>
     <div class="container">
-        <div class="row">
-            <div class="anits_logo">
-                <img src="./cursors/ANITS Logo.png" alt="anits logo">
-            </div>
-            <div class="visit_link">
-                <a href="http://www.cursors.anits.edu.in/">Visit Our Website</a>
+        <div class="date-time">
+            <div class="time-day">03:10,Friday</div>
+            <div class="date">28-06-2019</div>
+        </div>
+        <div class="customize">
+            <div class="text">customize</div>
+            <div class="icon">
+                <img src="./images/setting.svg" alt="settings">
             </div>
         </div>
-        <img src="./cursors/Flat-Mountains.svg" alt="background" class="background">
-        <div class="main"> 
-            <div class="cursors-icon">
-                <img src="./cursors/logo.png" alt="cursors2020">
+        <div class="editWindow">
+            <div class="wrapper">
+                <div class="text">choose background</div>
+                <div class="wallpapers">
+                    <img src="./images/bg/wallpaper1.jpg" alt="walllpapers">
+                    <img src="./images/bg/wallpaper2.jpg" alt="walllpapers">
+                    <img src="./images/bg/wallpaper3.jpg" alt="walllpapers">
+                    <img src="./images/bg/wallpaper4.jpg" alt="walllpapers">
+                    <img src="./images/bg/wallpaper5.jpg" alt="walllpapers">
+                </div>
+                <div class="custom-bg">
+                    <div class="upload">upload custom wallpaper</div>
+                    <input type="file" accept="image/*" class="file-selector">
+                </div>
+                <div class="close">close</div>
+
+            </div>
+        </div>
+        <div class="main">
+            <div class="branding">
+                <div class="brand-title"></div>
             </div>
             <div class="searchbar-wrapper">
                 <input type="text" placeholder="search here..." class="search-bar">
@@ -30,27 +59,30 @@
                 </div>
             </div>
             <div class="top-sites"> </div>
-            <div class="slogan">we write code to compile our success!</div>
-        </div>
-        <div class="branding">
-            <div class="brand">
-                made with ❤ by <a href="https://www.instagram.com/consious_coder/">
-                    @consious_coder
-                </a>
+            <div class="slogan">
+                <div class="slogan-text">we write code to compile our success!</div>
+            </div>
+            <div class="details">
+                <div class="learn-more">
+                    <a class="slogan-link" href="http://www.cursors.anits.edu.in">Learn More</a> about Cursors
+                </div>
             </div>
         </div>
     </div>
-
-  <template class="list-item-template">
-    <a class="list-item">
-        <div class="icon">
-            <img src="./images/icon.png" class="site-icon" alt="visited site">
-        </div>
-        <div class="label">
-            this is some name of the site
-        </div> 
-        <div class="overlay"></div>
-    </a>
-  </template>
+    <div class="credits">
+        Made With ❤ by <a href="https://www.linkedin.com/in/varaprasadh" class="credits-link">Varaprasadh</a>
+    </div>
+    <template class="list-item-template">
+        <a class="list-item">
+            <div class="icon">
+                <img src="./images/icon.png" class="site-icon" alt="visited site">
+            </div>
+            <div class="label">
+                this is some name of the site
+            </div>
+            <div class="overlay"></div>
+        </a>
+    </template>
 </body>
+
 </html>
