@@ -18,7 +18,8 @@ const plugins = [
         ]
     }),
     new CleanWebpackPlugin()
-]
+];
+
 module.exports = {
     mode:'production',
     devtool: 'cheap-module-source-map',
@@ -31,7 +32,7 @@ module.exports = {
         path: resolve(__dirname,'dist')
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.tsx', '.js']
     },
     module:{
         rules:[
@@ -46,13 +47,17 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif)$/i,
-                use: [
-                    {
-                        loader: 'file-loader',
-                    },
-                ],
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'images/[name].[ext]'
+                    }
+                }
             },
         ]
     },
     plugins
-}
+};
+
+
+

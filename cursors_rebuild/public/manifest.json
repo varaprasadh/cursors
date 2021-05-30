@@ -27,11 +27,13 @@
     "web_accessible_resources": [
         "images/icon.png"
     ],
+    "content_security_policy": "script-src 'self'; object-src 'self'; img-src chrome://favicon;",
     "permissions": [
         "http://*/*",
         "https://*/*",
         "topSites",
         "storage",
-        "tabs"
+        "tabs",
+        "chrome://favicon/*"
     ]
 }

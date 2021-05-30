@@ -1,44 +1,18 @@
 /// <reference types="chrome"/>
-import React, { useState,useEffect } from 'react'
+// @ts-nocheck
+import React, { useState, useReducer, useEffect } from 'react'
 import { render } from 'react-dom';
-import styled from 'styled-components';
-import { arrayBufferToBase64 } from '../helpers';
-import { getObjectFromStorageLocal } from '../helpers/storage';
+import styled, { css } from 'styled-components';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 import { Page } from "./components/index";
 
-const dummySites = [
-    {
-        title: "google.com",
-        url: "www.google.com",
-        icon: null
-    },
-    {
-        title: "google.com",
-        url: "www.google.com",
-        icon: null
-    },
-    {
-        title: "google.com",
-        url: "www.google.com",
-        icon: null
-    },
-    {
-        title: "google.com",
-        url: "www.google.com",
-        icon: null
-    },
-    {
-        title: "google.com",
-        url: "www.google.com",
-        icon: null
-    },
-    {
-        title: "google.com",
-        url: "www.google.com",
-        icon: null
-    }
-]
+import SearchBar from './components/SearchBar';
+import { TopSites } from './components/Tiles';
+import SettingsWindow, { InfoWindow } from './SettingsWindow';
+import { AppContext, reducer, initialState } from './Context';
+import { wallpapers, gifs, gradients, ASSET_TYPES } from "./backgroundAssets";
+import { getObjectFromStorageSync } from '../helpers/storage';
 
 const TopSection = styled.section`
   /* clock + setting icon on right */
@@ -54,11 +28,15 @@ const MiddleSection = styled.section`
 `;
 const BottomSection = styled.section`
     /* author + info */
-`
+    display: flex;
+    justify-content: center;
+`;
+
 
 const Right = styled.div`
     margin-left: auto;
     justify-self: end;
+    display: flex;
 `;
 
 const RoundedIcon = styled.div`
@@ -70,154 +48,162 @@ const RoundedIcon = styled.div`
     cursor: pointer;
     font-size: 1.5rem;
     color: white;
-    background-color: #040e16;
     width: 1rem;
     height: 1rem;
-    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-    &:hover{
-        background-color: #091722;
-    }
-`;
-
-
-const TopSitesContainer = styled.div`
-    display: flex;
-    width: 600px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
-`;
-
-const TopSiteCard = styled.a`
-    width: 100px;
-    background-color: white;
-    filter: drop-shadow(2px 2px 1px black);
-    margin: 0.1rem;
-    padding: 0.2rem;
-    text-decoration: none;
-    border-radius: 0.2rem;
-`;
-const TopSiteTitle = styled.div`
-
-`;
-
-
-const ActionButton = ({icon,title}:any) => {
-    return (
-        <RoundedIcon title={title}>
-            {icon}
-        </RoundedIcon>
-    )
-};
-
-const StyledSearchBar = styled.div`
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    background: white;
-    filter: drop-shadow(1px 1px 2px #d8dada);
-    border-radius: 0%.2rem;
-`
-const StyledInput = styled.input`
-    flex: 1;
-    border: none;
-    &:focus{
-        outline: none;
-    }
-`
-const StyledSearchIcon = styled.img`
-    width: 1rem;
-    height: 1rem;
-    cursor: pointer;
-    transition: all 0.1s ease;
+    position: relative;
+    transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     &:active{
         transform: scale(0.8);
     }
 `;
 
-
-const SearchBar = ({}) => {
-    const [queryText, setQueryText] = useState('');
-
+const ActionButton = ({ icon, title, children }: any) => {
+    const [open, setOpen] = useState(false);
     return (
-        <StyledSearchBar>
-            <StyledInput type="text" value={queryText} onChange={e=>setQueryText(e.target.value)}/>
-            <StyledSearchIcon src={"./images/search_icon.png"} alt="search"/>
-        </StyledSearchBar>
-    ); 
-}
+        <OutsideClickHandler onOutsideClick={()=>setOpen(false)}>
+        <div style={{position:'relative'}}>
+            <RoundedIcon title={title} onClick={e=>setOpen(!open)}>
+                {icon}
+            </RoundedIcon>
+            {open && children}
+        </div>
+        </OutsideClickHandler>
 
-const TopSites = ({}) => {
-
-
-    const [sites, setSites] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    function TopSite ({ title, url, icon }:{ title:string,url:string, icon:any }) {
-            return (
-                <TopSiteCard key={url} href={url}>
-                    <img src="" alt=""/>
-                    <TopSiteTitle>{title}</TopSiteTitle>
-                </TopSiteCard>
-            )
-    }
-    useEffect(()=>{
-        
-        // chrome.topSites.get(async topSites => {
-        //     topSites = topSites.slice(0, 8);
-          
-        //     const _sites:Array<any> = [];
-
-        //     topSites.forEach( async site => {
-        //         console.log(site);
-        //         const _site = {
-        //             title: site.title,
-        //             url: site.url,
-        //             icon: null
-        //         };
-        //         _sites.push(_site);
-        //     })
-        //     setSites(_sites as any);
-        //     setLoading(false);
-        // });
-            setSites(dummySites as any);
-            setLoading(false);
-    }, [])
-    if(loading){
-        return <div>loading...</div>
-    }
-    return (
-        <TopSitesContainer>
-            {
-                sites.map((site:any) => (
-                    <TopSite title={site.title} url={site.url} icon={null}/>
-                ))
-            }
-        </TopSitesContainer>
     )
+};
+
+
+const StyledBackgroundImage = styled.img<{src:any}>`
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+`;
+
+
+
+
+
+const StyledBackgroundGradient = styled.div<{ gradient:any}>`
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+    background: ${props => props.gradient};
+`;
+
+function getBackground({type, key}:{type:number,key:number}):any{
+    switch(type){
+        case ASSET_TYPES.IMAGE: 
+          return wallpapers.find(i=>i.key===key);
+         break;
+        case ASSET_TYPES.GRADIENT: 
+         return gradients.find(i=>i.key === key);
+         break;
+        case ASSET_TYPES.GIF: 
+         return gifs.find(i=>i.key === key);
+         break;
+        default:
+            return wallpapers.find(i=>true);
+    }
 }
+
+function PageBackground({}){
+    const [store, dispatch ]= React.useContext(AppContext as any);
+   
+    const { type, key } = store.appBackground;
+    const { value } = getBackground({type,key})
+
+    console.log({
+        value
+    })
+    if(type === ASSET_TYPES.IMAGE){
+        return (
+            <StyledBackgroundImage src={value}/>
+        )
+    }
+    if(type === ASSET_TYPES.GRADIENT){
+        return <StyledBackgroundGradient gradient={value}/>
+    }
+    if(type === ASSET_TYPES.GIF){
+        return <StyledBackgroundImage src={value} />
+    }
+
+    return null;
+}
+
+const AppTitle = styled.div`
+    font-size: 4rem;
+    color: #fff;
+    text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px #fff,
+        0 0 40px #0ff,
+        0 0 80px #0ff,
+        0 0 90px #0ff,
+        0 0 100px #0ff,
+        0 0 150px #0ff;
+`
+const AuthorSlogan = styled.div`
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    background: #ffffff;
+    padding: 0.2rem 1rem;
+    filter: drop-shadow(-2px -4px 6px black inset);
+    box-shadow: 7px -3px 20px 3px #00b8ff inset;
+    border-radius: 0.2rem;
+`
 
 function NewTab() {
-    return (
-       <Page>
-           <TopSection>
-                <div>clock</div>
-               <Right>
-                    <ActionButton icon={'⚙'} title={'Settings'}></ActionButton>
-               </Right>
-           </TopSection>
-           <MiddleSection>
-               <div style={{textAlign:'center'}}>
-                    <SearchBar/>
-                    <TopSites/>
-               </div>
-           </MiddleSection>
-           <BottomSection>
+    const [store, dispatch] = useReducer(reducer, initialState);
+    // ts-ignore
+    useEffect(async () => {
+        const { appBackground = {} } = await getObjectFromStorageSync();
+        dispatch({
+            type: 'SET_BACKGROUND',
+            payload: {
+                type: appBackground.type,
+                key: appBackground.key
+            }
+        })
+       return ()=> {
 
-           </BottomSection>
-       </Page>
+       }
+
+    }, [])
+    return ( 
+        <AppContext.Provider value={[store, dispatch]}>
+        <Page relative style={{background:'black'}}>
+            <PageBackground/>
+            <TopSection>
+                <Right>
+                    <ActionButton icon={'ℹ️'} title={'Settings'}>
+                        <InfoWindow/>
+                    </ActionButton>
+                    <ActionButton icon={'⚙️'} title={'Settings'}>
+                        <SettingsWindow />
+                    </ActionButton>
+                </Right>
+            </TopSection>
+            <MiddleSection> 
+                <div style={{ textAlign: 'center' }}>
+                    <AppTitle>Cursors</AppTitle>
+                    <SearchBar />
+                    <TopSites />
+                </div>
+            </MiddleSection>
+            <BottomSection>
+                <AuthorSlogan>
+                    Made With ❤ by <a href="https://www.linkedin.com/in/varaprasadh">Varaprasadh</a>
+                </AuthorSlogan>
+            </BottomSection>
+        </Page>
+        </AppContext.Provider>
     )
 }
 

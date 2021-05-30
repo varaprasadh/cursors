@@ -1,12 +1,20 @@
-import styled from 'styled-components';
+import styled, { css, StyledComponent } from 'styled-components';
 
-export const Page = styled.div`
+export const Page: any = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #cccbce; 
+  z-index: 0;
+  position: ${ (props:any) => props.relative ? "relative" : 'inherit'};
+  
 `;
  
 
-
+export const preventSelectStyles = css`
+user-select: none;
+-moz-user-select: none;
+-webkit-user-drag: none;
+-webkit-user-select: none;
+-ms-user-select: none;
+`
  
