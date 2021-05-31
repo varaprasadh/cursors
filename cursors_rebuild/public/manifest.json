@@ -1,8 +1,8 @@
 {
-    "version": "2.0.0",
+    "version": "3.0.0",
     "manifest_version": 2,
     "name": "cursors",
-    "description": " 2 Day TechFest conducted by CSE Dept at ANITS",
+    "description": "Clean new tab page made with 💟",
     "icons": {
         "128": "./images/icon.png",
         "48": "./images/icon.png",

@@ -28,6 +28,7 @@ const TileTitle = styled.div`
     white-space: nowrap;
     font-size: 1rem;
     padding: 0.1rem 0rem;
+    text-transform: capitalize;
 `;
 
 const TileImage = styled.img`

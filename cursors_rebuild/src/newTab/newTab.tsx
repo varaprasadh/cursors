@@ -9,7 +9,7 @@ import { Page } from "./components/index";
 
 import SearchBar from './components/SearchBar';
 import { TopSites } from './components/Tiles';
-import SettingsWindow, { InfoWindow } from './SettingsWindow';
+import SettingsWindow, { AuthorInfoWindow, InfoWindow } from './SettingsWindow';
 import { AppContext, reducer, initialState } from './Context';
 import { wallpapers, gifs, gradients, ASSET_TYPES } from "./backgroundAssets";
 import { getObjectFromStorageSync } from '../helpers/storage';
@@ -144,10 +144,7 @@ const AppTitle = styled.div`
         0 0 10px #fff,
         0 0 20px #fff,
         0 0 40px #0ff,
-        0 0 80px #0ff,
-        0 0 90px #0ff,
-        0 0 100px #0ff,
-        0 0 150px #0ff;
+        0 0 80px #0ff;
 `
 const AuthorSlogan = styled.div`
     margin-bottom: 0.5rem;
@@ -163,7 +160,7 @@ function NewTab() {
     const [store, dispatch] = useReducer(reducer, initialState);
     // ts-ignore
     useEffect(async () => {
-        const { appBackground = {} } = await getObjectFromStorageSync();
+        const { appBackground = { type:ASSET_TYPES.GIF, key:1 } } = await getObjectFromStorageSync();
         dispatch({
             type: 'SET_BACKGROUND',
             payload: {
@@ -181,7 +178,10 @@ function NewTab() {
         <Page relative style={{background:'black'}}>
             <PageBackground/>
             <TopSection>
-                <Right>
+                <Right>  
+                    <ActionButton icon={'❓'} title={'Settings'}>
+                        <AuthorInfoWindow/>
+                    </ActionButton>
                     <ActionButton icon={'ℹ️'} title={'Settings'}>
                         <InfoWindow/>
                     </ActionButton>
@@ -207,4 +207,4 @@ function NewTab() {
     )
 }
 
-render(<NewTab />, document.getElementById("app"));
+render(<NewTab />, document.getElementById("app")); 

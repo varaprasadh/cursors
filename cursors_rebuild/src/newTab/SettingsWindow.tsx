@@ -7,6 +7,8 @@ import { wallpapers, gifs, gradients, ASSET_TYPES } from "./backgroundAssets"
 import { preventSelectStyles } from './components';
 import { AppContext } from './Context';
 
+import myPhoto from "../icons/vara.jpeg";
+
 const WindowContainer = styled.div`
    position: absolute;
    top: 100%;
@@ -59,8 +61,13 @@ function Panel({ title, canToggle = true, children }: { title: any, children:any
 
     useEffect(()=>{
         // @ts-ignore file
-        const height = ref.current.scrollHeight;
-        setHeight(height);
+        let timer = setTimeout(()=>{
+            const height = ref.current.scrollHeight;
+            setHeight(height);
+        },100);
+
+        return ()=>clearTimeout(timer);
+
     },[]);
 
     return (
@@ -202,6 +209,7 @@ export default function SettingsWindow(){
     )
 }
 
+
 export function InfoWindow(){
     return (
         <WindowContainer>
@@ -209,12 +217,35 @@ export function InfoWindow(){
                 <p style={{padding:'0.5rem 1rem', lineHeight:'1.5rem'}}>
                     📣 This Extension is made for my lovely college <b>ANITS</b> on the occasion of yearly college festival 
                     named <b>"Cursors"</b> which is organized by 🖥 CSE department 
-                    <br/>
-                    on <b> 🕗 2019 March.</b>.
+                    on <b>🕗2019 March.</b>
                     <br/>
                     <br/>
                     <strong>👋Thank You!</strong>
                 </p>
+            </Panel>
+        </WindowContainer>
+    )
+}
+export function AuthorInfoWindow(){
+    const socialLinks = {
+        instagram: "https://www.instagram.com/i_varaprasadh/",
+        linkedin: "https://www.linkedin.com/in/varaprasadh"
+    }
+     
+    return (
+        <WindowContainer>
+            <Panel title={"🔯 About Me"} canToggle={false}>
+                <div style={{display:'flex', padding:"0.5rem 1rem"}}>
+                    <img src={myPhoto} alt="varaprasadh's photo" style={{width:'8rem'}}/>
+                    <div style={{marginLeft:'0.2rem',minWidth: "200px", lineHeight:'1.2rem'}}>
+                        👋Hi! I'm <strong>Varaprasadh</strong>, most of the people calls me 
+                        <strong><i>Vara.</i> </strong> I'm self-taught programmer(in my point of view 😜).
+                        <br/>
+                        if you want to talk with me then,
+                        you can contact me through <strong><a href={socialLinks.linkedin}> LinkedIn</a></strong>
+                        &nbsp;Or <strong><a href={socialLinks.instagram}>Instagram</a></strong>
+                    </div>
+                </div>
             </Panel>
         </WindowContainer>
     )
